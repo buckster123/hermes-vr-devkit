@@ -1,0 +1,6 @@
+# Add this under mcp_servers: in ~/.hermes/config.yaml
+  godot:
+    command: node
+    args: [$HOME/.local/share/godot-mcp/dist/index.js]
+    connect_timeout: 30
+    timeout: 120

@@ -1,0 +1,37 @@
+[gd_scene load_steps=4 format=3 uid="uid://player000000000000000000000001"]
+
+[ext_resource type="Script" path="res://scenes/locomotion.gd" id="1_locomotion"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_marker"]
+radius = 0.05
+height = 0.1
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_marker"]
+transparency = 1
+albedo_color = Color(0, 1, 0, 0.5)
+
+[node name="Player" type="Node3D"]
+
+[node name="XROrigin3D" type="XROrigin3D" parent="."]
+
+[node name="XRCamera3D" type="XRCamera3D" parent="XROrigin3D"]
+
+[node name="LeftController" type="XRController3D" parent="XROrigin3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.3, 0, 0)
+tracker = &"left_hand"
+
+[node name="RightController" type="XRController3D" parent="XROrigin3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.3, 0, 0)
+tracker = &"right_hand"
+
+[node name="Locomotion" type="Node3D" parent="XROrigin3D/RightController"]
+script = ExtResource("1_locomotion")
+
+[node name="TeleportRay" type="RayCast3D" parent="XROrigin3D/RightController/Locomotion"]
+target_position = Vector3(0, 0, -10)
+collision_mask = 1
+
+[node name="TeleportMarker" type="MeshInstance3D" parent="XROrigin3D/RightController/Locomotion"]
+visible = false
+mesh = SubResource("SphereMesh_marker")
+surface_material_override/0 = SubResource("StandardMaterial3D_marker")
