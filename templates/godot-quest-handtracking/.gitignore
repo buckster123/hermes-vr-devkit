@@ -1,0 +1,25 @@
+# Godot
+.godot/
+*.tmp
+
+# Android build artifacts
+android/build/
+*.apk
+*.apk.idsig
+
+# Gradle
+.gradle/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Blender backups
+*.blend1
+
+# Exports
+exports/

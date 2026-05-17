@@ -1,0 +1,35 @@
+[gd_scene load_steps=4 format=3 uid="uid://questhandplayer000000000001"]
+
+[ext_resource type="Script" path="res://scenes/hand_tracking.gd" id="1_handtracking"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_hand"]
+radius = 0.05
+height = 0.1
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_hand"]
+albedo_color = Color(0.8, 0.2, 0.2)
+
+[node name="Player" type="Node3D"]
+
+[node name="HandTracking" type="Node3D" parent="."]
+script = ExtResource("1_handtracking")
+
+[node name="XROrigin3D" type="XROrigin3D" parent="."]
+
+[node name="XRCamera3D" type="XRCamera3D" parent="XROrigin3D"]
+
+[node name="LeftHand" type="XRNode3D" parent="XROrigin3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.3, 0, 0)
+tracker = &"left_hand"
+
+[node name="HandVisual" type="MeshInstance3D" parent="LeftHand"]
+mesh = SubResource("SphereMesh_hand")
+surface_material_override/0 = SubResource("StandardMaterial3D_hand")
+
+[node name="RightHand" type="XRNode3D" parent="XROrigin3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.3, 0, 0)
+tracker = &"right_hand"
+
+[node name="HandVisual" type="MeshInstance3D" parent="RightHand"]
+mesh = SubResource("SphereMesh_hand")
+surface_material_override/0 = SubResource("StandardMaterial3D_hand")

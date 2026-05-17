@@ -22,6 +22,9 @@ log() { echo -e "${GREEN}[vr-devkit]${NC} $*"; }
 warn() { echo -e "${YELLOW}[vr-devkit]${NC} $*"; }
 err() { echo -e "${RED}[vr-devkit]${NC} $*"; }
 
+# Detect Blender version from installed binary
+BLENDER_VERSION="${BLENDER_VERSION:-$(blender --version 2>/dev/null | head -1 | grep -oP 'Blender \K[0-9]+\.[0-9]+' || echo "4.3")}"
+
 # Detect architecture
 ARCH=$(uname -m)
 case "$ARCH" in
@@ -71,6 +74,12 @@ sudo apt-get install -y \
   python3-pip \
   python3-numpy \
   || { err "Failed to install system packages"; exit 1; }
+
+# Install uv if not present
+if ! command -v uv >/dev/null 2>&1; then
+  log "Installing uv (Python package manager)..."
+  curl -LsSf https://astral.sh/uv/install.sh | sh
+fi
 
 # 2. Android SDK
 log "Installing Android SDK..."
@@ -128,7 +137,7 @@ if [ ! -f "$KEYSTORE" ]; then
   keytool -keyalg RSA -genkeypair -alias androiddebugkey -keypass android \
     -keystore "$KEYSTORE" -storepass android \
     -dname "CN=Android Debug,O=Android,C=US" -validity 9999 -deststoretype pkcs12 \
-    2>/dev/null || true
+    2>/dev/null || { err "Failed to create debug keystore. Is keytool installed?"; exit 1; }
 fi
 
 # 5. Godot editor settings
@@ -162,7 +171,7 @@ if [ ! -d "$GODOT_MCP_DIR/dist" ]; then
   cd /tmp
   git clone --depth 1 https://github.com/ee0pdt/Godot-MCP.git
   cd Godot-MCP/server
-  npm install && npm run build
+  npm install && npm run build || { err "Failed to build Godot-MCP server. Is Node.js installed?"; exit 1; }
   mkdir -p "$GODOT_MCP_DIR"
   cp -r dist node_modules package.json "$GODOT_MCP_DIR/"
   cd /tmp && rm -rf Godot-MCP
@@ -222,4 +231,5 @@ echo "  scrcpy:    $(which scrcpy)"
 echo "  gltfpack:  $(which gltfpack)"
 echo ""
 echo "To create a new VR project:"
-echo "  cp -r /path/to/hermes-vr-devkit/templates/godot-quest-vr ~/Projects/my-vr-app"
+echo "  cp -r $(dirname "$0")/templates/godot-quest-vr ~/Projects/my-vr-app"
+echo "  # Or if installed via curl: cp -r /path/to/hermes-vr-devkit/templates/godot-quest-vr ~/Projects/my-vr-app"
