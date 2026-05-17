@@ -36,11 +36,20 @@ Headless Export → Signed APK
 
 ### 1. Install Everything
 
+> Safety note: this repository contains installer scripts that install system packages,
+> download toolchains, and modify local development configuration. For first use,
+> prefer cloning the repo, reading the script, and running it locally instead of
+> piping a remote URL directly into `bash`. See `SECURITY.md` and
+> `docs/audit-plan.md` for the trust model and verification checklist.
+
 ```bash
-curl -sSL https://raw.githubusercontent.com/YOUR_ORG/hermes-vr-devkit/main/install.sh | bash
-# Or clone and run locally:
-git clone https://github.com/YOUR_ORG/hermes-vr-devkit.git
+# Fast path once you trust the script:
+curl -sSL https://raw.githubusercontent.com/buckster123/hermes-vr-devkit/main/install.sh | bash
+
+# Recommended first-time path:
+git clone https://github.com/buckster123/hermes-vr-devkit.git
 cd hermes-vr-devkit
+less install.sh
 ./install.sh
 ```
 
@@ -155,6 +164,12 @@ This stack is built for the Hermes Agent community. PRs welcome:
 - Additional starter templates (AR passthrough, multiplayer, etc.)
 - Install script portability (macOS, other distros)
 - Godot 4.6+ compatibility updates
+- Game-development workflow notes from real Hermes-assisted Godot prototypes
+
+Good contributions should be reproducible and cautious: prefer small docs,
+headless proof scripts, smoke tests, and explicit verification notes over large
+untested installer changes. See `CONTRIBUTING.md` and
+`docs/game-dev-skill-notes.md` for suggested contribution patterns.
 
 ## License
 
